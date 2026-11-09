@@ -9,7 +9,9 @@ spec.json:
   "titulo": ["CUBARSÍ", "NO TIENE"],          # líneas grandes en blanco
   "destacado": ["MASTER ROOKIE"],             # líneas grandes en lavanda (opcional)
   "remate": "EN MEGACRACKS",                  # línea mediana en blanco (opcional)
+  "ficha": "Shiny Rayquaza · Call of Legends (2011)",  # carta/producto exacto, en dorado (opcional)
   "texto": ["Frase corta 1.", "Frase corta 2."],  # 1-3 líneas finas (opcional)
+  "fuente": "Fuente: Dexerto · 3 nov. 2026",  # medio y fecha, abajo (obligatoria en noticias)
   "salida": "stories/2026-11-09-cubarsi.jpg"
 }
 
@@ -30,7 +32,7 @@ LAV = (196, 170, 255)
 WHITE = (245, 242, 255)
 SOFT = (215, 205, 240)
 MAX_W = 920
-TOP, BOTTOM = 360, 1240  # zona del bloque de texto; la marca va en 1300
+TOP, BOTTOM = 340, 1200  # zona del bloque de texto; fuente en 1232 y marca en 1300
 
 
 def font(weight, size):
@@ -77,11 +79,16 @@ def main(path):
         rows.append((t.upper(), fit(dr, t.upper(), "Bold", 104), LAV, 130, 0))
     if spec.get("remate"):
         rows.append((spec["remate"].upper(), fit(dr, spec["remate"].upper(), "Bold", 64), WHITE, 100, 0))
+    if spec.get("ficha"):
+        rows.append(("__hueco__", None, None, 14, 0))
+        rows.append((spec["ficha"], fit(dr, spec["ficha"], "Medium", 38, 28), GOLD, 64, 0))
     texto = spec.get("texto", [])
     if texto:
         rows.append(("__hueco__", None, None, 30, 0))
+        # mismo tamaño para todas las líneas del texto: el de la línea más larga
+        size = min(fit(dr, t, "Regular", 40, 30).size for t in texto)
         for t in texto:
-            rows.append((t, fit(dr, t, "Regular", 40, 30), SOFT, 62, 0))
+            rows.append((t, font("Regular", size), SOFT, 62, 0))
 
     total = sum(r[3] for r in rows)
     y = TOP + max(0, (BOTTOM - TOP - total) // 2)
@@ -98,6 +105,11 @@ def main(path):
             else:
                 dr.text(((W - dr.textlength(text, font=f)) / 2, y), text, font=f, fill=col)
         y += lh
+
+    # Fuente (obligatoria en noticias): "Fuente: Medio · fecha"
+    if spec.get("fuente"):
+        ft = fit(dr, spec["fuente"], "Regular", 30, 24)
+        dr.text(((W - dr.textlength(spec["fuente"], font=ft)) / 2, 1232), spec["fuente"], font=ft, fill=(170, 160, 200))
 
     # Marca
     mark, f, sp = "AREA151", font("Bold", 46), 10
