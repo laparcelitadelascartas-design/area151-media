@@ -12,6 +12,8 @@ spec.json:
   "ficha": "Shiny Rayquaza · Call of Legends (2011)",  # carta/producto exacto, en dorado (opcional)
   "texto": ["Frase corta 1.", "Frase corta 2."],  # 1-3 líneas finas (opcional)
   "fuente": "Fuente: Dexerto · 3 nov. 2026",  # medio y fecha, abajo (obligatoria en noticias)
+  "visual": "slab",                           # ilustración propia: "slab" | "carta" | "sobre" (opcional)
+  "sello": "FALSO",                           # palabra corta estampada sobre la ilustración (opcional)
   "salida": "stories/2026-11-09-cubarsi.jpg"
 }
 
@@ -68,15 +70,26 @@ def main(path):
     img = fondo()
     dr = ImageDraw.Draw(img)
 
+    # Ilustración propia opcional: "visual": "slab" | "carta" | "sobre", "sello": "FALSO"
+    visual = None
+    if spec.get("visual"):
+        from visuales import dibujar
+        visual = dibujar(spec["visual"], 285, spec.get("sello"))
+    k = 0.8 if visual else 1.0  # con ilustración, titulares algo más pequeños
+    top, bottom = (310, 1270) if visual else (TOP, BOTTOM)
+    y_fuente, y_marca = (1300, 1346) if visual else (1232, 1300)
+
     # Construir los bloques: (texto, fuente, color, alto de línea, espaciado de letras)
     rows = []
     if spec.get("etiqueta"):
         rows.append((spec["etiqueta"].upper(), fit(dr, spec["etiqueta"].upper(), "Medium", 34), GOLD, 58, 9))
-        rows.append(("__linea__", None, GOLD, 82, 0))
+        rows.append(("__linea__", None, GOLD, 40 if visual else 82, 0))
+    if visual:
+        rows.append(("__visual__", None, None, visual.height - 55, 0))
     for t in spec.get("titulo", []):
-        rows.append((t.upper(), fit(dr, t.upper(), "Bold", 118), WHITE, 138, 0))
+        rows.append((t.upper(), fit(dr, t.upper(), "Bold", int(118 * k)), WHITE, int(138 * k), 0))
     for t in spec.get("destacado", []):
-        rows.append((t.upper(), fit(dr, t.upper(), "Bold", 104), LAV, 130, 0))
+        rows.append((t.upper(), fit(dr, t.upper(), "Bold", int(104 * k)), LAV, int(130 * k), 0))
     if spec.get("remate"):
         rows.append((spec["remate"].upper(), fit(dr, spec["remate"].upper(), "Bold", 64), WHITE, 100, 0))
     if spec.get("ficha"):
@@ -88,12 +101,15 @@ def main(path):
         # mismo tamaño para todas las líneas del texto: el de la línea más larga
         size = min(fit(dr, t, "Regular", 40, 30).size for t in texto)
         for t in texto:
-            rows.append((t, font("Regular", size), SOFT, 62, 0))
+            rows.append((t, font("Regular", size), SOFT, 56 if visual else 62, 0))
 
     total = sum(r[3] for r in rows)
-    y = TOP + max(0, (BOTTOM - TOP - total) // 2)
+    y = top + max(0, (bottom - top - total) // 2)
     for text, f, col, lh, sp in rows:
-        if text == "__linea__":
+        if text == "__visual__":
+            img.paste(visual, ((W - visual.width) // 2, y - 35), visual)
+            dr = ImageDraw.Draw(img)
+        elif text == "__linea__":
             dr.line([(W / 2 - 60, y), (W / 2 + 60, y)], fill=col, width=3)
         elif text != "__hueco__":
             if sp:
@@ -109,14 +125,14 @@ def main(path):
     # Fuente (obligatoria en noticias): "Fuente: Medio · fecha"
     if spec.get("fuente"):
         ft = fit(dr, spec["fuente"], "Regular", 30, 24)
-        dr.text(((W - dr.textlength(spec["fuente"], font=ft)) / 2, 1232), spec["fuente"], font=ft, fill=(170, 160, 200))
+        dr.text(((W - dr.textlength(spec["fuente"], font=ft)) / 2, y_fuente), spec["fuente"], font=ft, fill=(170, 160, 200))
 
     # Marca
     mark, f, sp = "AREA151", font("Bold", 46), 10
     widths = [dr.textlength(c, font=f) for c in mark]
     x = (W - (sum(widths) + sp * (len(mark) - 1))) / 2
     for c, w in zip(mark, widths):
-        dr.text((x, 1300), c, font=f, fill=WHITE)
+        dr.text((x, y_marca), c, font=f, fill=WHITE)
         x += w + sp
 
     img.save(spec["salida"], quality=92)
