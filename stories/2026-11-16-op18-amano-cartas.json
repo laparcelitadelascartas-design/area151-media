@@ -1,0 +1,43 @@
+{
+  "etiqueta": "NOVEDAD ONE PIECE TCG",
+  "cartas": [
+    {
+      "imagen": "stories/imagenes/2026-11-16-op18-amano-bandai.jpg",
+      "recorte": [
+        114,
+        93,
+        505,
+        640
+      ],
+      "nombre": "Loki",
+      "codigo": "OP17-119"
+    },
+    {
+      "imagen": "stories/imagenes/2026-11-16-op18-amano-bandai.jpg",
+      "recorte": [
+        615,
+        93,
+        1005,
+        640
+      ],
+      "nombre": "Saint Shamrock",
+      "codigo": "OP18-119"
+    }
+  ],
+  "alto_cartas": 370,
+  "credito": "Arte: Yoshitaka Amano · Imágenes: Bandai · © Eiichiro Oda/Shueisha, Toei Animation",
+  "titulo": [
+    "EL ARTISTA DE FINAL FANTASY"
+  ],
+  "destacado": [
+    "DIBUJA ONE PIECE"
+  ],
+  "ficha": "The Dominance of God (OP-18) · en inglés el 20 nov.",
+  "texto": [
+    "¿Con cuál de las dos te quedarías?"
+  ],
+  "fuente": "Fuente: VICE · 11 nov. 2026",
+  "salida": "stories/2026-11-16-op18-amano-cartas.jpg",
+  "motivo": "Segunda historia del día, a petición del dueño: la misma noticia del OP-18 con las cartas oficiales de Loki (OP17-119) y Saint Shamrock (OP18-119) ilustradas por Yoshitaka Amano (imagen de Bandai facilitada por él), sin sello y con una pregunta amable para elegir entre las dos.",
+  "url_fuente": "https://www.vice.com/en/article/one-piece-card-game-november-booster-packs-reveal-release-date-price-and-details/"
+}
