@@ -72,7 +72,11 @@ def main(path):
 
     # Ilustración propia opcional: "visual": "slab" | "carta" | "sobre", "sello": "FALSO"
     visual = None
-    if spec.get("visual"):
+    if spec.get("cartas"):
+        # imágenes oficiales de cartas facilitadas por el dueño: [{"imagen", "recorte", "nombre", "codigo"}]
+        from visuales import cartas
+        visual = cartas(spec["cartas"], spec.get("alto_cartas", 340))
+    elif spec.get("visual"):
         from visuales import dibujar
         visual = dibujar(spec["visual"], 285, spec.get("sello"))
     k = 0.8 if visual else 1.0  # con ilustración, titulares algo más pequeños
@@ -86,10 +90,14 @@ def main(path):
         rows.append(("__linea__", None, GOLD, 40 if visual else 82, 0))
     if visual:
         rows.append(("__visual__", None, None, visual.height - 55, 0))
+        if spec.get("credito"):  # p. ej. "Imágenes: Bandai · © Eiichiro Oda/Shueisha, Toei Animation"
+            rows.append((spec["credito"], fit(dr, spec["credito"], "Regular", 22, 18), (150, 140, 180), 36, 0))
     for t in spec.get("titulo", []):
-        rows.append((t.upper(), fit(dr, t.upper(), "Bold", int(118 * k)), WHITE, int(138 * k), 0))
+        f = fit(dr, t.upper(), "Bold", int(118 * k))
+        rows.append((t.upper(), f, WHITE, min(int(138 * k), int(f.size * 1.25)), 0))  # si encoge, menos interlineado
     for t in spec.get("destacado", []):
-        rows.append((t.upper(), fit(dr, t.upper(), "Bold", int(104 * k)), LAV, int(130 * k), 0))
+        f = fit(dr, t.upper(), "Bold", int(104 * k))
+        rows.append((t.upper(), f, LAV, min(int(130 * k), int(f.size * 1.3)), 0))
     if spec.get("remate"):
         rows.append((spec["remate"].upper(), fit(dr, spec["remate"].upper(), "Bold", 64), WHITE, 100, 0))
     if spec.get("ficha"):

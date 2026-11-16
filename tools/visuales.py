@@ -132,6 +132,53 @@ def _sello(img, texto):
     return out
 
 
+def cartas(lista, alto, gap=44):
+    """Cartas reales aportadas por el dueño (imagen oficial que él facilita), una al lado de otra,
+    con su nombre y código debajo. No se retoca nada de la imagen (se mantienen marcas de agua).
+
+    lista: [{"imagen": ruta, "recorte": [x0, y0, x1, y1], "nombre": "LOKI", "codigo": "OP17-119"}]
+    """
+    fn = ImageFont.truetype(F + "Poppins-Bold.ttf", 27 * S)
+    fc = ImageFont.truetype(F + "Poppins-Medium.ttf", 23 * S)
+    H = alto * S
+    piezas = []
+    for c in lista:
+        im = Image.open(c["imagen"]).convert("RGBA").crop(tuple(c["recorte"]))
+        w = int(H * im.width / im.height)
+        im = im.resize((w, H), Image.LANCZOS)
+        mask = Image.new("L", im.size, 0)
+        ImageDraw.Draw(mask).rounded_rectangle([0, 0, w - 1, H - 1], radius=int(w * 0.045), fill=255)
+        im.putalpha(mask)
+        piezas.append((im, c.get("nombre", "").upper(), c.get("codigo", "")))
+    g = gap * S
+    lab = 14 * S + 36 * S + 30 * S  # hueco + nombre + código
+    medir = ImageDraw.Draw(Image.new("RGBA", (1, 1)))
+    # margen lateral para que ningún rótulo más ancho que su carta se corte
+    m = max(0, max(max(medir.textlength(n, font=fn), medir.textlength(c, font=fc)) - im.width
+                   for im, n, c in piezas) / 2)
+    m = int(m) + S
+    W = sum(p[0].width for p in piezas) + g * (len(piezas) - 1) + 2 * m
+    base = Image.new("RGBA", (W, H + lab), (0, 0, 0, 0))
+    d = ImageDraw.Draw(base)
+    x = m
+    for im, nombre, codigo in piezas:
+        base.alpha_composite(im, (x, 0))
+        cx = x + im.width / 2
+        d.text((cx - d.textlength(nombre, font=fn) / 2, H + 14 * S), nombre, font=fn, fill=WHITE + (255,))
+        d.text((cx - d.textlength(codigo, font=fc) / 2, H + 50 * S), codigo, font=fc, fill=GOLD + (255,))
+        x += im.width + g
+    pad = 40 * S
+    out = Image.new("RGBA", (base.width + pad * 2, base.height + pad * 2), (0, 0, 0, 0))
+    glow = Image.new("RGBA", out.size, (0, 0, 0, 0))
+    x = pad + m
+    for im, _, _ in piezas:
+        glow.paste(Image.new("RGBA", im.size, (150, 110, 255, 120)), (x, pad), im.split()[3])
+        x += im.width + g
+    out.alpha_composite(glow.filter(ImageFilter.GaussianBlur(18 * S)))
+    out.alpha_composite(base, (pad, pad))
+    return out.resize((out.width // S, out.height // S), Image.LANCZOS)
+
+
 def dibujar(tipo, alto, sello=None):
     H = alto * S
     if tipo == "slab":
