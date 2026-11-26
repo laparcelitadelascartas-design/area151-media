@@ -1,0 +1,31 @@
+{
+  "salida": "carruseles/2026-11-26-black-friday/",
+  "slides": [
+    {
+      "ancho": 800,
+      "bloques": [
+        {"tipo": "etiqueta", "texto": "BLACK FRIDAY"},
+        {"tipo": "visual", "visual": "sobre", "alto": 270},
+        {"tipo": "titulo", "lineas": ["-5 % EN TODA", "LA WEB"]},
+        {"tipo": "destacado", "lineas": ["+ SOBRE DE REGALO"]},
+        {"tipo": "hueco", "alto": 8},
+        {"tipo": "ficha", "texto": "Un sobre de Megacracks con cada pedido"},
+        {"tipo": "hueco", "alto": 10},
+        {"tipo": "texto", "lineas": ["Desde hoy hasta el lunes 30 en area151.es"]},
+        {"tipo": "hueco", "alto": 10},
+        {"tipo": "desliza"}
+      ]
+    },
+    {
+      "bloques": [
+        {"tipo": "etiqueta", "texto": "CÓMO FUNCIONA"},
+        {"tipo": "hueco", "alto": 20},
+        {"tipo": "filas", "items": [["Descuento", "5 % al pagar"], ["Regalo", "Sobre Megacracks"], ["Pedidos", "Todos, sin mínimo"], ["Hasta", "Lunes 30 nov."]]},
+        {"tipo": "hueco", "alto": 26},
+        {"tipo": "texto", "lineas": ["El descuento se aplica solo en la pantalla de pago.", "Mañana, Black Friday en directo en TikTok."]},
+        {"tipo": "hueco", "alto": 12},
+        {"tipo": "nota", "texto": "Enlace en el perfil: area151.es"}
+      ]
+    }
+  ]
+}
