@@ -1,0 +1,316 @@
+{
+  "salida": "carruseles/2026-11-26-gta-vi-panini/",
+  "fuente": "Fuentes: Panini America y nota de prensa de Panini y Rockstar Games · 24 nov. 2026",
+  "slides": [
+    {
+      "fuente": true,
+      "ancho": 800,
+      "bloques": [
+        {
+          "tipo": "etiqueta",
+          "texto": "NOVEDAD PANINI · GTA VI"
+        },
+        {
+          "tipo": "visual",
+          "visual": "sobre",
+          "sello": "1/1",
+          "alto": 290
+        },
+        {
+          "tipo": "titulo",
+          "lineas": [
+            "LAS CARTAS",
+            "DE GTA VI"
+          ]
+        },
+        {
+          "tipo": "destacado",
+          "lineas": [
+            "YA SON FÍSICAS"
+          ]
+        },
+        {
+          "tipo": "hueco",
+          "alto": 8
+        },
+        {
+          "tipo": "ficha",
+          "texto": "GTAVI: Sports Trading Card Collection · Panini (2026)"
+        },
+        {
+          "tipo": "hueco",
+          "alto": 14
+        },
+        {
+          "tipo": "desliza"
+        }
+      ]
+    },
+    {
+      "bloques": [
+        {
+          "tipo": "etiqueta",
+          "texto": "QUÉ ES"
+        },
+        {
+          "tipo": "visual",
+          "visual": "carta",
+          "alto": 230
+        },
+        {
+          "tipo": "titulo",
+          "lineas": [
+            "DEL JUEGO",
+            "A TU MANO"
+          ],
+          "tam": 84
+        },
+        {
+          "tipo": "hueco",
+          "alto": 18
+        },
+        {
+          "tipo": "texto",
+          "lineas": [
+            "Panini America y Rockstar Games anunciaron el 24 nov.",
+            "la versión física de las cartas que se coleccionan",
+            "dentro de GTA VI: los atletas y equipos ficticios",
+            "del juego, ahora con licencia oficial."
+          ],
+          "tam": 34
+        }
+      ]
+    },
+    {
+      "bloques": [
+        {
+          "tipo": "etiqueta",
+          "texto": "ASÍ ES LA CAJA"
+        },
+        {
+          "tipo": "cifras",
+          "cols": 3,
+          "alto_caja": 210,
+          "items": [
+            [
+              "4",
+              "CARTAS",
+              "POR SOBRE"
+            ],
+            [
+              "4",
+              "SOBRES",
+              "POR CAJA"
+            ],
+            [
+              "16",
+              "CAJAS",
+              "POR CASE"
+            ]
+          ]
+        },
+        {
+          "tipo": "hueco",
+          "alto": 34
+        },
+        {
+          "tipo": "destacado",
+          "lineas": [
+            "POR CAJA, DE MEDIA"
+          ],
+          "tam": 46
+        },
+        {
+          "tipo": "hueco",
+          "alto": 8
+        },
+        {
+          "tipo": "cifras",
+          "cols": 4,
+          "alto_caja": 180,
+          "tam_num": 80,
+          "tam_txt": 24,
+          "items": [
+            [
+              "2",
+              "ROOKIES"
+            ],
+            [
+              "1",
+              "RETRO"
+            ],
+            [
+              "1",
+              "ILLUSTRATED"
+            ],
+            [
+              "4",
+              "SPECIAL",
+              "SILVERS"
+            ]
+          ]
+        },
+        {
+          "tipo": "hueco",
+          "alto": 22
+        },
+        {
+          "tipo": "nota",
+          "texto": "16 cartas por caja. Datos de Panini America."
+        }
+      ]
+    },
+    {
+      "bloques": [
+        {
+          "tipo": "etiqueta",
+          "texto": "LAS NUMERADAS"
+        },
+        {
+          "tipo": "titulo",
+          "lineas": [
+            "LA CAZA ES",
+            "LA GOLD 1/1"
+          ],
+          "tam": 80
+        },
+        {
+          "tipo": "hueco",
+          "alto": 30
+        },
+        {
+          "tipo": "filas",
+          "alto_fila": 86,
+          "items": [
+            [
+              "Paralelos de colores de equipo",
+              "/199 y /99"
+            ],
+            [
+              "Legend Bronze",
+              "/49"
+            ],
+            [
+              "Legend Silver",
+              "/25"
+            ],
+            [
+              "Legend Gold",
+              "1/1"
+            ]
+          ]
+        },
+        {
+          "tipo": "hueco",
+          "alto": 26
+        },
+        {
+          "tipo": "texto",
+          "lineas": [
+            "Las Legend llevan la firma impresa:",
+            "sus atletas solo existen en el juego."
+          ],
+          "tam": 32
+        }
+      ]
+    },
+    {
+      "bloques": [
+        {
+          "tipo": "etiqueta",
+          "texto": "YA SE HAN VISTO"
+        },
+        {
+          "tipo": "titulo",
+          "lineas": [
+            "HAY HASTA",
+            "UNA FUTBOLISTA"
+          ],
+          "tam": 66
+        },
+        {
+          "tipo": "hueco",
+          "alto": 30
+        },
+        {
+          "tipo": "filas",
+          "alto_fila": 86,
+          "tam": 32,
+          "items": [
+            [
+              "Anne Florence",
+              "Special Teal",
+              "Fútbol · Vice City Club de Fútbol"
+            ],
+            [
+              "Carl Camp",
+              "Rookie",
+              "Baloncesto"
+            ],
+            [
+              "Delord Nathan Alford",
+              "Retro",
+              "Fútbol americano · Manatees"
+            ],
+            [
+              "Elias Delgado",
+              "Special Pink",
+              "Béisbol · Legends of PBL"
+            ],
+            [
+              "L. Heavy",
+              "Wrestling",
+              "Lucha libre · B.A.M."
+            ],
+            [
+              "Maleek Rivers",
+              "Legend",
+              "Fútbol americano · Manatees"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "fuente": true,
+      "bloques": [
+        {
+          "tipo": "etiqueta",
+          "texto": "CUÁNDO Y DÓNDE"
+        },
+        {
+          "tipo": "visual",
+          "visual": "sobre",
+          "alto": 220
+        },
+        {
+          "tipo": "titulo",
+          "lineas": [
+            "SALEN EN",
+            "DICIEMBRE"
+          ],
+          "tam": 88
+        },
+        {
+          "tipo": "destacado",
+          "lineas": [
+            "SIN PRECIO NI DÍA"
+          ],
+          "tam": 62
+        },
+        {
+          "tipo": "hueco",
+          "alto": 20
+        },
+        {
+          "tipo": "texto",
+          "lineas": [
+            "Panini America ya la tiene en su web como «Coming Soon».",
+            "Venta fuera de EE. UU.: sin confirmar."
+          ],
+          "tam": 32
+        }
+      ]
+    }
+  ]
+}
