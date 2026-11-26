@@ -187,6 +187,73 @@ def medir(dr, b, max_w):
                 dr.text((x1 - 30 - dr.textlength(der, font=f_der), yy + (rh - f_der.size * 1.35) / 2), der,
                         font=f_der, fill=GOLD)
         return len(items) * rh + (len(items) - 1) * gap, pintar
+    if t == "cartas":
+        # Imágenes oficiales de cartas facilitadas por el dueño (sin retocar), en abanico o en rejilla
+        alto_c = b.get("alto", 300)
+        piezas = []
+        for it in b["items"]:
+            c = Image.open(it["img"]).convert("RGBA")
+            w = int(alto_c * c.width / c.height)
+            c = c.resize((w, alto_c), Image.LANCZOS)
+            m = Image.new("L", c.size, 0)
+            ImageDraw.Draw(m).rounded_rectangle([0, 0, w - 1, alto_c - 1], radius=int(w * 0.04), fill=255)
+            c.putalpha(m)
+            piezas.append((c, it))
+        if b.get("modo") == "abanico":
+            ang, paso = b.get("angulo", 9), b.get("paso", 0.62)
+            n = len(piezas)
+            capa = Image.new("RGBA", (W, alto_c + 160), (0, 0, 0, 0))
+            orden = sorted(range(n), key=lambda i: -abs(i - (n - 1) / 2))  # el centro, encima
+            cx = W / 2
+            fondo_cartas = 0
+            for i in orden:
+                c, _ = piezas[i]
+                off = i - (n - 1) / 2
+                rot = c.rotate(-ang * off, expand=True, resample=Image.BICUBIC)
+                x = int(cx + off * c.width * paso - rot.width / 2)
+                yy = int(80 + abs(off) * 26 - (rot.height - alto_c) / 2)  # laterales, algo más abajo
+                sombra = Image.new("RGBA", capa.size, (0, 0, 0, 0))
+                sombra.paste(Image.new("RGBA", rot.size, (150, 110, 255, 150)), (x, yy), rot.split()[3])
+                capa = Image.alpha_composite(capa, sombra.filter(ImageFilter.GaussianBlur(22)))
+                capa.alpha_composite(rot, (x, yy))
+                fondo_cartas = max(fondo_cartas, yy + rot.height)
+            def pintar(img, dr, y):
+                img.paste(capa, (0, y - 60), capa)
+            return fondo_cartas - 60 + b.get("margen", 24), pintar
+        cols = b.get("cols", len(piezas))
+        gap_x, gap_y = b.get("gap", 40), b.get("gap_y", 24)
+        col_w = min((max_w - gap_x * (cols - 1)) // cols, max(c.width for c, _ in piezas) + 70)
+        fn, fs = b.get("tam_nombre", 24), b.get("tam_sub", 20)
+        hay_txt = any(it.get("nombre") for _, it in piezas)
+        lab = (12 + int(fn * 1.35) + int(fs * 1.4)) if hay_txt else 0
+        filas_n = (len(piezas) + cols - 1) // cols
+        def pintar(img, dr, y):
+            for f in range(filas_n):
+                fila = piezas[f * cols:(f + 1) * cols]
+                total_w = len(fila) * col_w + (len(fila) - 1) * gap_x
+                x0 = (W - total_w) // 2
+                yy = y + f * (alto_c + lab + gap_y)
+                capa = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+                for k, (c, it) in enumerate(fila):
+                    x = x0 + k * (col_w + gap_x) + (col_w - c.width) // 2
+                    capa.paste(Image.new("RGBA", c.size, (150, 110, 255, 140)), (x, yy), c.split()[3])
+                capa = capa.filter(ImageFilter.GaussianBlur(18))
+                for k, (c, it) in enumerate(fila):
+                    x = x0 + k * (col_w + gap_x) + (col_w - c.width) // 2
+                    capa.alpha_composite(c, (x, yy))
+                img.paste(Image.alpha_composite(img.convert("RGBA"), capa).convert("RGB"))
+                dr = ImageDraw.Draw(img)
+                for k, (c, it) in enumerate(fila):
+                    cxk = x0 + k * (col_w + gap_x) + col_w / 2
+                    ly = yy + alto_c + 12
+                    if it.get("nombre"):
+                        f1 = fit(dr, it["nombre"], "Bold", fn, col_w + gap_x - 10, 16)
+                        dr.text((cxk - dr.textlength(it["nombre"], font=f1) / 2, ly), it["nombre"], font=f1, fill=WHITE)
+                        ly += int(fn * 1.35)
+                    if it.get("sub"):
+                        f2 = fit(dr, it["sub"], "Medium", fs, col_w + gap_x - 10, 14)
+                        dr.text((cxk - dr.textlength(it["sub"], font=f2) / 2, ly), it["sub"], font=f2, fill=GOLD)
+        return filas_n * (alto_c + lab) + (filas_n - 1) * gap_y, pintar
     if t == "desliza":
         f = font("Medium", 26)
         def pintar(img, dr, y):
@@ -207,7 +274,9 @@ def slide(spec, s, n, total):
     dr = ImageDraw.Draw(img)
     max_w = s.get("ancho", 860)
     piezas = [medir(dr, b, max_w) for b in s["bloques"]]
-    fondo_y = (Y_FUENTE - 20) if s.get("fuente") else BOTTOM - 20
+    pie = [txt for clave, txt in (("credito", spec.get("credito")), ("fuente", spec.get("fuente")))
+           if s.get(clave) and txt]
+    fondo_y = (Y_FUENTE - 20 - 30 * (len(pie) - 1)) if pie else BOTTOM - 20
     alto = sum(p[0] for p in piezas)
     y = TOP + max(0, (fondo_y - TOP - alto) // 2)
     for h, pintar in piezas:
@@ -216,9 +285,10 @@ def slide(spec, s, n, total):
         y += h
     if y > fondo_y:
         print(f"AVISO slide {n}: el contenido llega a y={y} (límite {fondo_y})")
-    if s.get("fuente") and spec.get("fuente"):
-        ft = fit(dr, spec["fuente"], "Regular", 26, 900, 20)
-        centrado(dr, Y_FUENTE - 6, spec["fuente"], ft, GREY)
+    # Pie: crédito de imágenes y/o fuente, de abajo arriba
+    for k, txt in enumerate(reversed(pie)):
+        ft = fit(dr, txt, "Regular", 24, 900, 18)
+        centrado(dr, Y_FUENTE - 6 - 32 * k, txt, ft, GREY)
     # Marca y número de slide
     espaciado(dr, W / 2, Y_MARCA, "AREA151", font("Bold", 34), WHITE, 8)
     return img, y
